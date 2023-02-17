@@ -35,27 +35,27 @@ int main()
     cout << "Le client écoute sur le port " << portClient << "." << endl << endl;
 
     // Tant que le programme n'est pas arrêté par l'utilisateur
-    /*while (true) {
+    while (true) {
         cout << "Entrer un message: ";
         getline(cin, messageSortant);
-        paquetSortant << messageSortant;
+        //paquetSortant << messageSortant;
 
-        socket.send(paquetSortant, adresseServeur, portServeur);
+        //socket.send(paquetSortant, adresseServeur, portServeur);
 
-        // On attend la réception de données sur le socket pour un maximum de 5 secondes.
-        // Passé ce délai, la méthode `wait` retournera false.
-        if (selecteur.wait(sf::seconds(5))) {
-            socket.receive(paquetEntrant, adressePaquetEntrant, portPaquetEntrant);
+        //// On attend la réception de données sur le socket pour un maximum de 5 secondes.
+        //// Passé ce délai, la méthode `wait` retournera false.
+        //if (selecteur.wait(sf::seconds(5))) {
+        //    socket.receive(paquetEntrant, adressePaquetEntrant, portPaquetEntrant);
 
-            paquetEntrant >> messageEntrant;
+        //    paquetEntrant >> messageEntrant;
 
-            cout << "Le serveur (" << adressePaquetEntrant << ":" << portPaquetEntrant
-                << ") a retourné : " << messageEntrant << endl;
-        }
-        else {
-            cout << "Le serveur n'a retourné aucune réponse après 5 secondes." << endl;
-        }
+        //    cout << "Le serveur (" << adressePaquetEntrant << ":" << portPaquetEntrant
+        //        << ") a retourné : " << messageEntrant << endl;
+        //}
+        //else {
+        //    cout << "Le serveur n'a retourné aucune réponse après 5 secondes." << endl;
+        //}
 
-        paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
-    }*/
+        //paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
+    }
 }
