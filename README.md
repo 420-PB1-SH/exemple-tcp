@@ -1,7 +1,10 @@
-# Solution Visual Studio de départ (SFML)
+# Exemple de programmation TCP avec SFML
 
-Ce dépôt contient une solution Visual Studio 2022 dans laquelle le module réseau
-de SFML a été pré-installé. Cette solution comprend deux projets: un pour le client et un
+Ce dépôt contient un exemple d'un client et un serveur s'échangeant des données
+en TCP via le module réseau de SFML. Il s'agit d'un exemple de type "écho": tous
+les messages envoyés par le client sont renvoyés par le serveur.
+
+La solution Visual Studio 2022 comprend deux projets: un pour le client et un
 pour le serveur.
 
 ## Pour démarrer les deux projets en même temps
