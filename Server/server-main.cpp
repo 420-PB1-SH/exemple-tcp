@@ -7,7 +7,7 @@ int main()
 {
     sf::TcpListener listener;
     sf::TcpSocket* nouveauClient;
-    vector<sf::TcpSocket> clients; // Vecteur dynamique contenant les sockets de tous les clients
+    vector<sf::TcpSocket*> clients; // Vecteur dynamique contenant les sockets de tous les clients
     sf::SocketSelector selecteur;
     sf::Packet paquetEntrant;
     sf::Packet paquetSortant;
@@ -38,23 +38,25 @@ int main()
             if (selecteur.isReady(listener)) {
                 nouveauClient = new sf::TcpSocket();
                 listener.accept(*nouveauClient);
-                clients.push_back(*nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
+                clients.push_back(nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
                 selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sélecteur
+
+                cout << "Un nouveau client s'est connecté: " << nouveauClient->getRemoteAddress();
             }
 
             // Itérer sur les sockets de tous les clients
             for (int i = 0; i < clients.size(); i++) {
                 // Si ce socket d'un client a reçu de nouvelles données
-                if (selecteur.isReady(clients[i])) {
-                    clients[i].receive(paquetEntrant);
+                if (selecteur.isReady(*clients[i])) {
+                    clients[i]->receive(paquetEntrant);
 
                     paquetEntrant >> message;
 
-                    cout << clients[i].getRemoteAddress() << " a envoyé: " << message << endl;
+                    cout << clients[i]->getRemoteAddress() << " a envoyé: " << message << endl;
 
                     // Renvoyer le même message au client
                     paquetSortant << message;
-                    clients[i].send(paquetSortant);
+                    clients[i]->send(paquetSortant);
                 }
             }
         }
