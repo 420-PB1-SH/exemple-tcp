@@ -6,7 +6,6 @@ using namespace std;
 int main()
 {
     sf::TcpSocket socket;
-    sf::SocketSelector selecteur;
     sf::IpAddress adresseServeur = "127.0.0.1";
 
     unsigned short portServeur = 54000;
@@ -25,10 +24,6 @@ int main()
         return 1;
     }
     portClient = socket.getLocalPort();
-
-    // On associe le socket à un sélecteur.
-    // Celui-ci permettra de mettre un temps d'attente maximal sur la réception de données.
-    selecteur.add(socket);
 
     cout << "Écho Réseau" << endl;
     cout << "===========" << endl << endl;
