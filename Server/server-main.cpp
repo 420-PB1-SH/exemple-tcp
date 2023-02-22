@@ -9,6 +9,8 @@ int main()
     sf::TcpSocket* nouveauClient;
     vector<sf::TcpSocket*> clients; // Vecteur dynamique contenant les sockets de tous les clients
     sf::SocketSelector selecteur;
+
+    sf::Socket::Status etatClient;
     sf::Packet paquetEntrant;
     sf::Packet paquetSortant;
 
@@ -41,22 +43,34 @@ int main()
                 clients.push_back(nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
                 selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sélecteur
 
-                cout << "Un nouveau client s'est connecté: " << nouveauClient->getRemoteAddress() << endl;
+                cout << "Un nouveau client s'est connecté: "
+                     << nouveauClient->getRemoteAddress() << ":" << nouveauClient->getRemotePort() << endl;
             }
 
             // Itérer sur les sockets de tous les clients
             for (int i = 0; i < clients.size(); i++) {
                 // Si ce socket d'un client a reçu de nouvelles données
                 if (selecteur.isReady(*clients[i])) {
-                    clients[i]->receive(paquetEntrant);
+                    etatClient = clients[i]->receive(paquetEntrant);
 
-                    paquetEntrant >> message;
+                    // Détecter la déconnexion du client
+                    if (etatClient == sf::Socket::Disconnected) {
+                        cout << "Le client " << clients[i]->getRemoteAddress()
+                             << ":" << clients[i]->getRemotePort()
+                             << " s'est déconnecté." << endl;
+                        selecteur.remove(*clients[i]); // Retirer le socket client du sélecteur
+                        clients.erase(clients.begin() + i); // Retirer le socket client du vecteur
+                    }
+                    else {
+                        paquetEntrant >> message;
 
-                    cout << clients[i]->getRemoteAddress() << " a envoyé: " << message << endl;
+                        cout << clients[i]->getRemoteAddress() << ":" << clients[i]->getRemotePort()
+                             << " a envoyé: " << message << endl;
 
-                    // Renvoyer le même message au client
-                    paquetSortant << message;
-                    clients[i]->send(paquetSortant);
+                        // Renvoyer le même message au client
+                        paquetSortant << message;
+                        clients[i]->send(paquetSortant);
+                    }
                 }
             }
         }
