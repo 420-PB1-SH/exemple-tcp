@@ -41,7 +41,7 @@ int main()
                 clients.push_back(nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
                 selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sélecteur
 
-                cout << "Un nouveau client s'est connecté: " << nouveauClient->getRemoteAddress();
+                cout << "Un nouveau client s'est connecté: " << nouveauClient->getRemoteAddress() << endl;
             }
 
             // Itérer sur les sockets de tous les clients

@@ -14,6 +14,8 @@ int main()
 
     string messageSortant;
     string messageEntrant;
+    sf::Packet paquetSortant;
+    sf::Packet paquetEntrant;
 
     setlocale(LC_ALL, "");
 
@@ -38,24 +40,17 @@ int main()
     while (true) {
         cout << "Entrer un message: ";
         getline(cin, messageSortant);
-        //paquetSortant << messageSortant;
+        paquetSortant << messageSortant;
 
-        //socket.send(paquetSortant, adresseServeur, portServeur);
+        socket.send(paquetSortant);
 
-        //// On attend la réception de données sur le socket pour un maximum de 5 secondes.
-        //// Passé ce délai, la méthode `wait` retournera false.
-        //if (selecteur.wait(sf::seconds(5))) {
-        //    socket.receive(paquetEntrant, adressePaquetEntrant, portPaquetEntrant);
+        socket.receive(paquetEntrant);
 
-        //    paquetEntrant >> messageEntrant;
+        paquetEntrant >> messageEntrant;
 
-        //    cout << "Le serveur (" << adressePaquetEntrant << ":" << portPaquetEntrant
-        //        << ") a retourné : " << messageEntrant << endl;
-        //}
-        //else {
-        //    cout << "Le serveur n'a retourné aucune réponse après 5 secondes." << endl;
-        //}
+        cout << "Le serveur (" << socket.getRemoteAddress() << ":" << socket.getRemotePort()
+             << ") a retourné : " << messageEntrant << endl;
 
-        //paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
+        paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
     }
 }
