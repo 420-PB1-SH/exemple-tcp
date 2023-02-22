@@ -53,7 +53,8 @@ int main()
                 if (selecteur.isReady(*clients[i])) {
                     etatClient = clients[i]->receive(paquetEntrant);
 
-                    // Détecter la déconnexion du client
+                    // Détecter la déconnexion du client.
+                    // À la déconnexion, on reçoit un Packet vide, donc on ne le traitera pas.
                     if (etatClient == sf::Socket::Disconnected) {
                         cout << "Le client " << clients[i]->getRemoteAddress()
                              << ":" << clients[i]->getRemotePort()
