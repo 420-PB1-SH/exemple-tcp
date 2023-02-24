@@ -56,9 +56,14 @@ int main()
                     // À la déconnexion, on reçoit un Packet vide, donc on ne le traitera pas.
                     if (etatClient == sf::Socket::Disconnected) {
                         cout << "Le client " << clients[i]->getRemoteAddress()
-                             << ":" << clients[i]->getRemotePort()
-                             << " s'est déconnecté." << endl;
+                            << ":" << clients[i]->getRemotePort()
+                            << " s'est déconnecté." << endl;
+
                         selecteur.remove(*clients[i]); // Retirer le socket client du sélecteur
+                        
+                        delete clients[i];
+                        clients[i] = nullptr;
+                        
                         clients.erase(clients.begin() + i); // Retirer le socket client du vecteur
                     }
                     else {
