@@ -19,7 +19,7 @@ int main()
     setlocale(LC_ALL, "");
 
     // Se connecter au serveur
-    if (socket.connect(adresseServeur, portServeur)) {
+    if (socket.connect(adresseServeur, portServeur) != sf::Socket::Done) {
         cout << "Une erreur est survenue lors de la connexion au serveur." << endl;
         return 1;
     }
