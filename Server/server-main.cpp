@@ -15,7 +15,6 @@ int main()
     sf::Packet paquetSortant;
 
     unsigned short portServeur = 54000;
-    unsigned short portClient;
 
     string message;
 
@@ -23,52 +22,52 @@ int main()
 
     // Attacher le listener au port du serveur
     if (listener.listen(portServeur) != sf::Socket::Done) {
-        cout << "Une erreur est survenue lors de la création du listener." << endl;
+        cout << "Une erreur est survenue lors de la crÃ©ation du listener." << endl;
         return 1;
     }
 
-    // Ajouter le listener au sélecteur
+    // Ajouter le listener au sÃ©lecteur
     selecteur.add(listener);
 
-    cout << "Le serveur écoute sur le port " << portServeur << "." << endl;
+    cout << "Le serveur Ã©coute sur le port " << portServeur << "." << endl;
 
-    // Tant que le programme n'est pas arrêté par l'utilisateur
+    // Tant que le programme n'est pas arrÃªtÃ© par l'utilisateur
     while (true) {
-        // Attendre un maximum de 10 ms que des données soient reçues sur un socket (incluant le listener)
+        // Attendre un maximum de 10 ms que des donnÃ©es soient reÃ§ues sur un socket (incluant le listener)
         if (selecteur.wait(sf::milliseconds(10.f))) {
-            // Si le listener a reçu une nouvelle demande de connexion
+            // Si le listener a reÃ§u une nouvelle demande de connexion
             if (selecteur.isReady(listener)) {
                 nouveauClient = new sf::TcpSocket();
                 listener.accept(*nouveauClient);
                 clients.push_back(nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
-                selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sélecteur
+                selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sÃ©lecteur
 
-                cout << "Un nouveau client s'est connecté: "
+                cout << "Un nouveau client s'est connectÃ©: "
                      << nouveauClient->getRemoteAddress() << ":" << nouveauClient->getRemotePort() << endl;
             }
 
-            // Itérer sur les sockets de tous les clients
+            // ItÃ©rer sur les sockets de tous les clients
             for (int i = 0; i < clients.size(); i++) {
-                // Si ce socket d'un client a reçu de nouvelles données
+                // Si ce socket d'un client a reÃ§u de nouvelles donnÃ©es
                 if (selecteur.isReady(*clients[i])) {
                     etatClient = clients[i]->receive(paquetEntrant);
 
-                    // Détecter la déconnexion du client.
-                    // À la déconnexion, on reçoit un Packet vide, donc on ne le traitera pas.
+                    // DÃ©tecter la dÃ©connexion du client.
+                    // Ã€ la dÃ©connexion, on reÃ§oit un Packet vide, donc on ne le traitera pas.
                     if (etatClient == sf::Socket::Disconnected) {
                         cout << "Le client " << clients[i]->getRemoteAddress()
                              << ":" << clients[i]->getRemotePort()
-                             << " s'est déconnecté." << endl;
-                        selecteur.remove(*clients[i]); // Retirer le socket client du sélecteur
+                             << " s'est dÃ©connectÃ©." << endl;
+                        selecteur.remove(*clients[i]); // Retirer le socket client du sÃ©lecteur
                         clients.erase(clients.begin() + i); // Retirer le socket client du vecteur
                     }
                     else {
                         paquetEntrant >> message;
 
                         cout << clients[i]->getRemoteAddress() << ":" << clients[i]->getRemotePort()
-                             << " a envoyé: " << message << endl;
+                             << " a envoyÃ©: " << message << endl;
 
-                        // Renvoyer le même message au client
+                        // Renvoyer le mÃªme message au client
                         paquetSortant << message;
                         clients[i]->send(paquetSortant);
                     }
@@ -76,6 +75,6 @@ int main()
             }
         }
 
-        paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
+        paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le rÃ©utiliser
     }
 }
