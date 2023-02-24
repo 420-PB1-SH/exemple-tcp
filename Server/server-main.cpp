@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <SFML/Network.hpp>
 
 using namespace std;
