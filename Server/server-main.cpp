@@ -34,8 +34,8 @@ int main()
 
     // Tant que le programme n'est pas arrêté par l'utilisateur
     while (true) {
-        // Attendre un maximum de 10 ms que des données soient reçues sur un socket (incluant le listener)
-        if (selecteur.wait(sf::milliseconds(10.f))) {
+        // Attendre que des données soient reçues sur un socket (incluant le listener)
+        if (selecteur.wait()) {
             // Si le listener a reçu une nouvelle demande de connexion
             if (selecteur.isReady(listener)) {
                 nouveauClient = new sf::TcpSocket();
