@@ -83,4 +83,9 @@ int main()
 
         paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
     }
+
+    for (int i = 0; i < clients.size(); i++) {
+		delete clients[i];
+        clients[i] = nullptr;
+	}
 }
