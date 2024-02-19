@@ -23,45 +23,45 @@ int main()
 
     // Attacher le listener au port du serveur
     if (listener.listen(portServeur) != sf::Socket::Done) {
-        cout << "Une erreur est survenue lors de la crÃ©ation du listener." << endl;
+        cout << "Une erreur est survenue lors de la création du listener." << endl;
         return 1;
     }
 
-    // Ajouter le listener au sÃ©lecteur
+    // Ajouter le listener au sélecteur
     selecteur.add(listener);
 
-    cout << "Le serveur Ã©coute sur le port " << portServeur << "." << endl;
+    cout << "Le serveur écoute sur le port " << portServeur << "." << endl;
 
-    // Tant que le programme n'est pas arrÃªtÃ© par l'utilisateur
+    // Tant que le programme n'est pas arrêté par l'utilisateur
     while (true) {
-        // Attendre que des donnÃ©es soient reÃ§ues sur un socket (incluant le listener)
+        // Attendre que des données soient reçues sur un socket (incluant le listener)
         selecteur.wait();
 
-        // Si le listener a reÃ§u une nouvelle demande de connexion
+        // Si le listener a reçu une nouvelle demande de connexion
         if (selecteur.isReady(listener)) {
             nouveauClient = new sf::TcpSocket();
             listener.accept(*nouveauClient);
             clients.push_back(nouveauClient); // On ajoute le socket du nouveau client au vecteur de clients
-            selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sÃ©lecteur
+            selecteur.add(*nouveauClient); // Il faut aussi ajouter le socket au sélecteur
 
-            cout << "Un nouveau client s'est connectÃ©: "
+            cout << "Un nouveau client s'est connecté: "
                     << nouveauClient->getRemoteAddress() << ":" << nouveauClient->getRemotePort() << endl;
         }
 
-        // ItÃ©rer sur les sockets de tous les clients
+        // Itérer sur les sockets de tous les clients
         for (int i = 0; i < clients.size(); i++) {
-            // Si ce socket d'un client a reÃ§u de nouvelles donnÃ©es
+            // Si ce socket d'un client a reçu de nouvelles données
             if (selecteur.isReady(*clients[i])) {
                 etatClient = clients[i]->receive(paquetEntrant);
 
-                // DÃ©tecter la dÃ©connexion du client.
-                // Ã€ la dÃ©connexion, on reÃ§oit un Packet vide, donc on ne le traitera pas.
+                // Détecter la déconnexion du client.
+                // À la déconnexion, on reçoit un Packet vide, donc on ne le traitera pas.
                 if (etatClient == sf::Socket::Disconnected) {
                     cout << "Le client " << clients[i]->getRemoteAddress()
                         << ":" << clients[i]->getRemotePort()
-                        << " s'est dÃ©connectÃ©." << endl;
+                        << " s'est déconnecté." << endl;
 
-                    selecteur.remove(*clients[i]); // Retirer le socket client du sÃ©lecteur
+                    selecteur.remove(*clients[i]); // Retirer le socket client du sélecteur
                         
                     delete clients[i];
                     clients[i] = nullptr;
@@ -72,13 +72,13 @@ int main()
                     paquetEntrant >> message;
 
                     cout << clients[i]->getRemoteAddress() << ":" << clients[i]->getRemotePort()
-                            << " a envoyÃ©: " << message << endl;
+                            << " a envoyé: " << message << endl;
 
-                    // Renvoyer le mÃªme message au client
+                    // Renvoyer le même message au client
                     paquetSortant << message;
                     clients[i]->send(paquetSortant);
 
-                    paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le rÃ©utiliser
+                    paquetSortant.clear(); // On efface le contenu de paquetSortant pour pouvoir le réutiliser
                 }
             }
         }
